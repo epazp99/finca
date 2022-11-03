@@ -2,6 +2,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import Welcome from "./components/Welcome.vue";
 import Table from './components/Table.vue'
+import User from './components/User.vue'
 
 const routes = [
     {
@@ -13,7 +14,12 @@ const routes = [
         path: "/tables",
         name: "Table",
         component: Table
-      }
+    },
+    {
+        path: "/users",
+        name: "User",
+        component: User
+    }
   ];
 
   const router = createRouter({

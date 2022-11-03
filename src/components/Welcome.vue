@@ -1,5 +1,6 @@
+<!-- eslint-disable vue/no-multiple-template-root -->
 <template> 
-      <h1>Welcome</h1> 
+    <br/> <br/>    <h1 style="text-align:center">Welcome</h1> 
   </template>
   
   <script> 

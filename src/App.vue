@@ -43,7 +43,7 @@ export default {
     return{
       items:[ 
       {link: '/',name: 'Dashboard', tooltip: 'Dashboard', icon: 'bx-grid-alt' },
-      {link: '#',name: 'User', tooltip: 'User', icon: 'bx-user' },
+      {link: '/users',name: 'User', tooltip: 'User', icon: 'bx-user' },
       {link: '/tables',name: 'Tables', tooltip: 'Tables', icon: 'bx-table' },
       {link: '#',name: 'Filtred', tooltip: 'Filtred', icon: 'bx-heart' },
       {link: '#',name: 'Information', tooltip: 'Information', icon: 'bx-folder' },
