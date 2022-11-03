@@ -3,7 +3,16 @@ import App from './App.vue'
   
 
 import VueSidebarMenuAkahon from "vue-sidebar-menu-akahon";
-//Vue.component('vue-sidebar-menu-akahon', VueSidebarMenuAkahon);
+import VueRouter from 'vue-router'
 
-createApp(App).mount('#app')
+import router from "./router";
+
+
+// createApp(App).mount('#app')
+
+const app = createApp(App);
+app.use(router);
+app.mount("#app");
+
+
   

@@ -1,22 +1,26 @@
-<template>
-    <div id="app">
+<template> 
+ <div class="container text-center mt-5 mb-5" style="margin-right:5%;margin-left:5%">
+    <h1 class="mt-5 fw-bolder text-success " style="text-align:center;color:red"> Finca's Database </h1>
+    <br/> <br/>
+     <div class="table-responsive my-5">
       <table id="tableComponent" class="table table-striped">
     <thead>
       <tr>
         <!-- loop through each value of the fields to get the table header -->
-        <th  v-for="field in fields" :key='field' @click="sortTable(field)" > 
+        <th  v-for="field in testFields" :key='field' @click="sortTable(field)" > 
           {{field}} <i class="bi bi-sort-alpha-down" aria-label='Sort Icon'></i>
          </th>
       </tr>
     </thead>
     <tbody>
         <!-- Loop through the list get the each student data -->
-        <tr v-for="item in studentData" :key='item'>
-        <td v-for="field in fields" :key='field'>{{item[field]}}</td>
+        <tr v-for="item in testData" :key='item'>
+        <td v-for="field in testFields" :key='field'>{{item[field]}}</td>
       </tr>
     </tbody>
-  </table> 
-    </div>
+  </table>  
+</div> 
+    </div> 
   </template>
   
   <script> 
@@ -30,7 +34,21 @@
         fields:{
             type: Array,
         }, 
-    }, 
+    },
+    data(){
+    return{ 
+      testData: [
+      {ID:"01", Name: "Abiola Esther", Ocupation:"Computer Science", Gender:"Female", Age:"17"},
+     {ID:"02", Name: "Robert V. Kratz", Ocupation:"Philosophy", Gender:"Male", Age:'19'},
+      {ID:"03", Name: "Kristen Anderson", Ocupation:"Economics", Gender:"Female", Age:'20'},
+     {ID:"04", Name: "Adam Simon", Ocupation:"Food science", Gender:"Male", Age:'21'},
+      {ID:"05", Name: "Daisy Katherine", Ocupation:"Business studies", Gender:"Female", Age:'22'},  
+    ],
+    testFields: [
+      'ID','Name','Ocupation','Gender','Age'
+    ]
+    }
+  },  
   }
   
   </script>

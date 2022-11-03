@@ -12,32 +12,32 @@
     profileRole="" 
     :menuItems="items"
     />
-    <div class="container text-center mt-5 mb-5" style="margin-right:5%;margin-left:5%">
+    <!-- <div class="container text-center mt-5 mb-5" style="margin-right:5%;margin-left:5%">
     <h1 class="mt-5 fw-bolder text-success " style="text-align:center;color:red"> Finca's Database </h1>
     <br/> <br/>
      <div class="table-responsive my-5">
-
-      <!-- The table component -->
+ 
        <Table :fields='fields' :studentData ="studentData"></Table>
      </div> 
-    </div>
-    <Welcome/>
+    </div> -->
+  
+    <router-view/>
   </div>
 </template>
 
 <script> 
  // Importing the table component
-import Welcome from './components/Welcome.vue'
-import Table from './components/Table.vue'
+//import Welcome from './components/Welcome.vue'
+//import Table from './components/Table.vue'
 import VueSidebarMenuAkahon from "vue-sidebar-menu-akahon";
 
 export default {
   name: 'App',
   components: {
     VueSidebarMenuAkahon,
-    Table,
+   // Table,
     // eslint-disable-next-line vue/no-unused-components
-    Welcome
+   // Welcome
   },
   data(){
     return{
