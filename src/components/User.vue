@@ -3,18 +3,40 @@
 <div style="text-align:center">
     <br/> <br/>  <h1>Users</h1>
     <br/> <br/> <br/>
-    <button type="button" class="button button--accept">New user</button>
+ 
+    <button type="button" class="button button--accept" v-on:click="showModal()">New user</button>
     <button type="button" class="button button--edit">Edit user</button>
     <button type="button" class="button button--cancel">Delete user</button>
+
+    <div v-if="show">NEWWWWWWWWWWWW</div>
+     <!-- <Modal v-if="show"></Modal> -->
     </div>
 </template>
 
 <script> 
+//import { Modal } from './components/Modal.vue'
+
 export default {
   name: 'UserComponent',
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+   // Modal,  
+  },
   props:{
-      text: null
+      text: null,
+      // eslint-disable-next-line vue/require-prop-type-constructor 
   }, 
+  data(){
+    return{
+      show: null
+    }
+  },
+  methods:{
+    showModal(){
+// eslint-disable-next-line vue/no-mutating-props
+     this.show = "g";
+    }
+  }
 }
 
 </script>
