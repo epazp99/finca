@@ -23,6 +23,8 @@
     <div class="modal" 
          role="dialog" 
          v-if="showModal">
+         <a @click="showModal = false" class="modal-exit">x</a>
+
       <h1>Insert a new user</h1>
       <br/>
       <div style="display:flex; justify-content:center">
@@ -148,6 +150,15 @@ export default {
   background: #2c3e50;
   opacity: 0.6;
   cursor: pointer;
+}
+
+.modal-exit{
+  font-size:25px;
+  padding-left: 85%;
+  padding-top:0px;
+  margin-top:0px;
+  cursor: pointer;
+  color: gray;
 }
 
 /* ---------------------------------- */
