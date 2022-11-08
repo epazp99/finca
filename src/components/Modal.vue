@@ -1,35 +1,40 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
-<template> 
-    <div>
-  <b-button v-b-modal.modal-1>Launch demo modal</b-button>
+ <template> 
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
+  Launch demo modal
+</button>
 
-  <b-modal id="modal-1" title="BootstrapVue">
-    <p class="my-4">Hello from modal!</p>
-  </b-modal>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">...</div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
 </div>
   </template>
   
-  <script> 
-  import { BootstrapVue } from 'bootstrap-vue'
-
-  import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
+  <script>  
 
   export default {
-    name: 'ModalComponent',
-    components:{
-      // eslint-disable-next-line vue/no-unused-components
-      BootstrapVue
-    }, 
+    name: 'ModalComponent' 
   }
   
   </script>
 
-<style lang="scss">
-@import 'node_modules/bootstrap/scss/bootstrap.scss';
-@import 'node_modules/bootstrap-vue/src/index.scss';
+<style>
+@import 'https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+</style>
 
-.selector-for-some-widget {
-  box-sizing: content-box;
-}
+<style lang="scss">
 </style>
