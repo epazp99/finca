@@ -1,40 +1,147 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
  <template> 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#exampleModal">
-  Launch demo modal
-</button>
+<transition name="fade" appear>
+    <div class="modal-overlay" 
+         v-if="showModal" 
+          ></div>
+  </transition>
+  <transition name="pop" appear>
+    <div class="modal" 
+         role="dialog" 
+         v-if="showModal">
+         <a @click="showModal = false" class="modal-exit">x</a>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+      <h1>Insert a new user</h1>
+      <br/><br/>
+      <div class="row">
+      <div style="justify-content:center">
+       Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <input class="input-modal" type="text" placeholder="Your name">
       </div>
-      <div class="modal-body">...</div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
+      <br/>
+      <div style="justify-content:center">
+       Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <input class="input-modal" type="email" placeholder="Your email">
+      </div>
+      <br/>
+      <div style="justify-content:center">
+       Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <input class="input-modal" type="number" placeholder="Your age">
+      </div>
+      <br/>
+      <div style="justify-content:center">
+       Number:  &nbsp;&nbsp;
+       <input class="input-modal" type="number" placeholder="Your number">
       </div>
     </div>
+      <br/><br/><br/>
+      <div style="display:flex; justify-content:center">
+      <button type="button" class="button button--accept" @click="showModal = false">Aceptar</button>
+      <button type="button" class="button button--cancel" @click="showModal = false">Cancelar</button>
+    </div>
   </div>
-</div>
+  </transition>
   </template>
   
   <script>  
 
   export default {
-    name: 'ModalComponent' 
+    name: 'ModalComponent',
+     
   }
   
   </script>
 
 <style>
-@import 'https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css';
-@import 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css';
+
+
 </style>
 
 <style lang="scss">
+
+
+.modal {
+  position: absolute;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+  text-align: center;
+  width: 40%;
+  height: fit-content;
+  max-width: 100%;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
+  background: #FFF;
+  z-index: 999;
+  transform: none;
+}
+.modal h1 {
+  margin: 0 0 1rem;
+}
+
+.modal-overlay {
+  content: '';
+  position: absolute;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 998;
+  background: #2c3e50;
+  opacity: 0.6;
+  cursor: pointer;
+}
+
+.modal-exit{
+  font-size:25px;
+  padding-left: 85%;
+  padding-top:0px;
+  margin-top:0px;
+  cursor: pointer;
+  color: gray;
+}
+
+/* ---------------------------------- */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .4s linear;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.pop-enter-active,
+.pop-leave-active {
+  transition: transform 0.4s cubic-bezier(0.5, 0, 0.5, 1), opacity 0.4s linear;
+}
+
+.pop-enter,
+.pop-leave-to {
+  opacity: 0;
+  transform: scale(0.3) translateY(-50%);
+}
+
+
+
+.input-modal{
+    width:50%; 
+    padding: 1.5%;
+    border:1px solid #aaa;
+    border-radius:10px; 
+    outline:none;
+    box-sizing:border-box;
+    transition:.3s;
+  }
+  
+.input-modal:focus{
+    border-color:dodgerBlue;
+    box-shadow:0 0 8px 0 dodgerBlue; 
+  }
 </style>

@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template> 
-<div style="text-align:center">
+<div style="text-align:center;justify-content:center">
     <br/> <br/>  <h1>Users</h1>
     <br/> <br/> <br/>
  
@@ -9,11 +9,10 @@
     <button type="button" class="button button--cancel">Delete user</button>
 
     <div v-if="show1">NEWWWWWWWWWWWW</div>
-    <!-- <Modal v-if="show"></Modal>    -->
+     <!-- <Modal v-if="showModal"></Modal>     -->
 
   </div>
 
- 
   <transition name="fade" appear>
     <div class="modal-overlay" 
          v-if="showModal" 
@@ -26,18 +25,38 @@
          <a @click="showModal = false" class="modal-exit">x</a>
 
       <h1>Insert a new user</h1>
-      <br/>
-      <div style="display:flex; justify-content:center">
-       Name:  &nbsp;&nbsp;
+      <hr/>
+      <br/>   <br/> 
+      <div class="content-modal">
+      <div class="row">
+      <div style="justify-content:center">
+       Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
        <input class="input-modal" type="text" placeholder="Your name">
       </div>
       <br/>
-      <div style="display:flex; justify-content:center">
+      <div style="justify-content:center">
+       Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <input class="input-modal" type="email" placeholder="Your email">
+      </div>
+      <br/>
+      <div style="justify-content:center">
+       Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+       <input class="input-modal" type="number" placeholder="Your age">
+      </div>
+      <br/>
+      <div style="justify-content:center">
+       Number:  &nbsp;&nbsp;
+       <input class="input-modal" type="number" placeholder="Your number">
+      </div>
+    </div>
+  </div>
+      <br/><br/> 
+      <div style="display:flex; justify-content:center;text-align:center;">
       <button type="button" class="button button--accept" @click="showModal = false">Aceptar</button>
       <button type="button" class="button button--cancel" @click="showModal = false">Cancelar</button>
     </div>
   </div>
-  </transition>
+  </transition> 
      
 </template>
 
@@ -49,7 +68,7 @@ export default {
   name: 'UserComponent',
   components: { 
   // eslint-disable-next-line vue/no-unused-components
-  //Modal,  
+ // Modal,  
   },
   props:{
       text: null,
@@ -161,7 +180,20 @@ export default {
   color: gray;
 }
 
+.content-modal{
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+background-color: rgb(243, 242, 242);
+padding-top: 8%;
+padding-bottom: 8%;
+border-radius: 1rem;
+margin-left: 5%;
+margin-right: 5%;
+}
+
 /* ---------------------------------- */
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity .4s linear;
@@ -183,20 +215,19 @@ export default {
   transform: scale(0.3) translateY(-50%);
 }
 
-
-
+ 
 .input-modal{
     width:50%; 
     padding: 1.5%;
-    border:1px solid #aaa;
+    border:1px solid rgb(225, 225, 225);
     border-radius:10px; 
-    
+    outline:none;
     box-sizing:border-box;
     transition:.3s;
   }
   
 .input-modal:focus{
-    border-color:dodgerBlue;
-    box-shadow:0 0 8px 0 dodgerBlue; 
+    border-color:#5C8F22;
+    box-shadow:0 0 8px 0 #5C8F22; 
   }
 </style>
