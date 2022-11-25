@@ -21,73 +21,107 @@
     <div class="modal" 
          role="dialog" 
          v-if="showModal">
-         <a @click="showModal = false" class="modal-exit">x</a>
+         <a @click="cleanForm()" class="modal-exit">x</a>
 
       <h1>Insert a new user</h1>
       <hr/>
       <br/>   <br/> 
       <div class="content-modal">
+        <form method="POST" name="sentMessage" id="contactForm" @submit="sendForm()" action="https://vuejs.org/" validate="novalidate">
       <div class="row">
       <div style="justify-content:center">
        Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="text" placeholder="Your name">
+       <input class="input-modal" type="text" v-model="name" placeholder="Your name" required="required" data-validation-required-message="Please enter your name">
       </div>
       <br/>
       <div style="justify-content:center">
        Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="email" placeholder="Your email">
+       <input class="input-modal" type="email" v-model="email" placeholder="Your email" required="required" data-validation-required-message="Please enter your email">
       </div>
       <br/>
       <div style="justify-content:center">
        Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your age">
+       <input class="input-modal" type="number" v-model="age" placeholder="Your age" required="required" data-validation-required-message="Please enter your age">
       </div>
       <br/>
       <div style="justify-content:center">
        Number:  &nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your number">
+       <input class="input-modal" type="number" v-model="number" placeholder="Your number" required="required" data-validation-required-message="Please enter your number">
       </div>
     </div>
+    </form>
   </div>
+  <p v-if="errors.length">
+    <br/>
+    <b style="color:#EB5E30">Debe llenar todos los campos</b>
+    <ul> 
+      <!-- <li v-for="error in errors">{{ error }}</li> -->
+    </ul>
+  </p>
       <br/><br/> 
       <div style="display:flex; justify-content:center;text-align:center;">
-      <button type="button" class="button button--accept" @click="showModal = false">Aceptar</button>
-      <button type="button" class="button button--cancel" @click="showModal = false">Cancelar</button>
+      <button type="button" class="button button--accept" @click="sendForm()">Aceptar</button>
+      <button type="button" class="button button--cancel" @click="cleanForm()">Cancelar</button>
     </div>
+
+    
   </div>
   </transition> 
      
 </template>
 
-<script> 
+<script>
 //import { Modal } from "./components/Modal.vue";
- 
 
 export default {
-  name: 'UserComponent',
-  components: { 
-  // eslint-disable-next-line vue/no-unused-components
- // Modal,  
+  name: "UserComponent",
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    // Modal,
   },
-  props:{
-      text: null,
-      // eslint-disable-next-line vue/require-prop-type-constructor 
-  }, 
-  data(){
-    return{ 
-      showModal: false
-    }
+  props: {
+    text: null,
+    // eslint-disable-next-line vue/require-prop-type-constructor
   },
-  methods:{ 
-  }
-}
+  data() {
+    return {
+      showModal: false,
+      errors: [],
+      name: null,
+      age: null,
+      email: null,
+      number: null,
+    };
+  },
+  methods: {
+    sendForm() {
+      if (!this.name) this.errors.push("El nombre es obligatorio.");
 
+      if (!this.age) this.errors.push("La edad es obligatoria.");
+
+      if (!this.email) this.errors.push("El correo es obligatorio.");
+
+      if (!this.number) this.errors.push("El numero es obligatoria.");
+
+      if (this.name && this.age && this.email && this.number) {
+        this.cleanForm();
+      }
+    },
+    cleanForm() {
+      this.showModal = false;
+      this.name = null;
+      this.age = null;
+      this.email = null;
+      this.number = null;
+      this.errors = [];
+    },
+  },
+};
 </script>
 
 
 
 <style lang="scss">
-
 .button {
   margin: 0 15px;
   padding: 15px 0;
@@ -98,38 +132,34 @@ export default {
   cursor: pointer;
   text-transform: uppercase;
   font-weight: 700;
-  letter-spacing: .2em;
+  letter-spacing: 0.2em;
 }
 
 .button--accept {
-  background-color: lighten(#5C8F22, 25);
-  
+  background-color: lighten(#5c8f22, 25);
+
   &:hover {
-    background-color: lighten(#5C8F22, 10);
+    background-color: lighten(#5c8f22, 10);
   }
 }
 
-
 .button--cancel {
-  background-color: lighten(#EB5E30, 10);
-  
+  background-color: lighten(#eb5e30, 10);
+
   &:hover {
-    background-color: #EB5E30;
+    background-color: #eb5e30;
   }
 }
 
 .button--edit {
   background-color: lighten(#3f38cb, 10);
-  
+
   &:hover {
     background-color: #5268a6;
   }
 }
-  
 
-
-
-.button {  
+.button {
   cursor: pointer;
 }
 
@@ -148,7 +178,7 @@ export default {
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  background: #FFF;
+  background: #fff;
   z-index: 999;
   transform: none;
 }
@@ -157,7 +187,7 @@ export default {
 }
 
 .modal-overlay {
-  content: '';
+  content: "";
   position: absolute;
   position: fixed;
   top: 0;
@@ -170,32 +200,32 @@ export default {
   cursor: pointer;
 }
 
-.modal-exit{
-  font-size:25px;
+.modal-exit {
+  font-size: 25px;
   padding-left: 85%;
-  padding-top:0px;
-  margin-top:0px;
+  padding-top: 0px;
+  margin-top: 0px;
   cursor: pointer;
   color: gray;
 }
 
-.content-modal{
+.content-modal {
   align-content: center;
   text-align: center;
   justify-content: center;
-background-color: rgb(243, 242, 242);
-padding-top: 8%;
-padding-bottom: 8%;
-border-radius: 1rem;
-margin-left: 5%;
-margin-right: 5%;
+  background-color: rgb(243, 242, 242);
+  padding-top: 8%;
+  padding-bottom: 8%;
+  border-radius: 1rem;
+  margin-left: 5%;
+  margin-right: 5%;
 }
 
 /* ---------------------------------- */
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .4s linear;
+  transition: opacity 0.4s linear;
 }
 
 .fade-enter,
@@ -214,19 +244,18 @@ margin-right: 5%;
   transform: scale(0.3) translateY(-50%);
 }
 
- 
-.input-modal{
-    width:50%; 
-    padding: 1.5%;
-    border:1px solid rgb(225, 225, 225);
-    border-radius:10px; 
-    outline:none;
-    box-sizing:border-box;
-    transition:.3s;
-  }
-  
-.input-modal:focus{
-    border-color:#5C8F22;
-    box-shadow:0 0 8px 0 #5C8F22; 
-  }
+.input-modal {
+  width: 50%;
+  padding: 1.5%;
+  border: 1px solid rgb(225, 225, 225);
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
+
+.input-modal:focus {
+  border-color: #5c8f22;
+  box-shadow: 0 0 8px 0 #5c8f22;
+}
 </style>

@@ -13,34 +13,40 @@
 
       <h1>Insert a new user</h1>
       <br/><br/>
-      <form method="POST" name="sentMessage" id="contactForm">
+      <form method="POST" name="sentMessage" id="contactForm" @submit="enviarFormulario()" action="https://vuejs.org/">
       <div class="row">
     
       <div style="justify-content:center">
        Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="text" placeholder="Your name" required="required" data-validation-required-message="Please enter your name">
+       <input class="input-modal" v-model="name" type="text" placeholder="Your name" required="required" data-validation-required-message="Please enter your name">
       </div>
       <br/>
       <div style="justify-content:center">
        Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="email" placeholder="Your email" required="required" data-validation-required-message="Please enter your email">
+       <input class="input-modal" v-model="email" type="email" placeholder="Your email" required="required" data-validation-required-message="Please enter your email">
       </div>
       <br/>
       <div style="justify-content:center">
        Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your age" required="required" data-validation-required-message="Please enter your age">
+       <input class="input-modal" v-model="age" type="number" placeholder="Your age" required="required" data-validation-required-message="Please enter your age">
       </div>
       <br/>
       <div style="justify-content:center">
        Number:  &nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your number" required="required" data-validation-required-message="Please enter your number">
+       <input class="input-modal" v-model="number" type="number" placeholder="Your number" required="required" data-validation-required-message="Please enter your number">
       </div>
       
+      <p v-if="errors.length">
+    <b>Por favor, corrija el(los) siguiente(s) error(es):</b>
+    <ul> 
+      <!-- <li v-for="error in errors">{{ error }}</li> -->
+    </ul>
+  </p>
     </div>
       <br/><br/><br/>
       <div style="display:flex; justify-content:center">
-      <button type="button" class="button button--accept" @click="enviarFormulario()">Aceptar</button>
-      <button type="button" class="button button--cancel" @click="enviarFormulario()">Cancelar</button>
+      <button type="submit" class="button button--accept" @click="enviarFormulario()">Aceptar</button>
+      <button type="submit" class="button button--cancel" @click="enviarFormulario()">Cancelar</button>
     </div>
   </form>
   </div>
@@ -53,12 +59,36 @@
     name: 'ModalComponent',
     data(){
       return{ 
+    errors: [],
+    name: null,
+    age: null,
+    email: null,
+    number: null
       }
     },
     methods:{
       enviarFormulario() {
+        if (this.name && this.age && this.email && this.number) {
         this.showModal = false;
-        console.log("dddd")
+        
+        }
+        console.log("dddd");
+        this.errors = [];
+
+if (!this.name) 
+  this.errors.push('El nombre es obligatorio.');
+
+if (!this.age) 
+  this.errors.push('La edad es obligatoria.');
+
+  if (!this.email) 
+  this.errors.push('El correo es obligatorio.');
+
+if (!this.number) 
+  this.errors.push('El numero es obligatoria.');
+
+
+e.preventDefault();
       }
     } 
   }
