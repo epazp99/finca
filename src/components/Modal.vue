@@ -13,32 +13,36 @@
 
       <h1>Insert a new user</h1>
       <br/><br/>
+      <form method="POST" name="sentMessage" id="contactForm">
       <div class="row">
+    
       <div style="justify-content:center">
        Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="text" placeholder="Your name">
+       <input class="input-modal" type="text" placeholder="Your name" required="required" data-validation-required-message="Please enter your name">
       </div>
       <br/>
       <div style="justify-content:center">
        Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="email" placeholder="Your email">
+       <input class="input-modal" type="email" placeholder="Your email" required="required" data-validation-required-message="Please enter your email">
       </div>
       <br/>
       <div style="justify-content:center">
        Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your age">
+       <input class="input-modal" type="number" placeholder="Your age" required="required" data-validation-required-message="Please enter your age">
       </div>
       <br/>
       <div style="justify-content:center">
        Number:  &nbsp;&nbsp;
-       <input class="input-modal" type="number" placeholder="Your number">
+       <input class="input-modal" type="number" placeholder="Your number" required="required" data-validation-required-message="Please enter your number">
       </div>
+      
     </div>
       <br/><br/><br/>
       <div style="display:flex; justify-content:center">
-      <button type="button" class="button button--accept" @click="showModal = false">Aceptar</button>
-      <button type="button" class="button button--cancel" @click="showModal = false">Cancelar</button>
+      <button type="button" class="button button--accept" @click="enviarFormulario()">Aceptar</button>
+      <button type="button" class="button button--cancel" @click="enviarFormulario()">Cancelar</button>
     </div>
+  </form>
   </div>
   </transition>
   </template>
@@ -47,16 +51,20 @@
 
   export default {
     name: 'ModalComponent',
-     
+    data(){
+      return{ 
+      }
+    },
+    methods:{
+      enviarFormulario() {
+        this.showModal = false;
+        console.log("dddd")
+      }
+    } 
   }
   
   </script>
-
-<style>
-
-
-</style>
-
+ 
 <style lang="scss">
 
 
@@ -69,7 +77,7 @@
   left: 0;
   margin: auto;
   text-align: center;
-  width: 40%;
+  width: 40%; 
   height: fit-content;
   max-width: 100%;
   padding: 2rem;
@@ -105,7 +113,7 @@
   cursor: pointer;
   color: gray;
 }
-
+ 
 /* ---------------------------------- */
 .fade-enter-active,
 .fade-leave-active {

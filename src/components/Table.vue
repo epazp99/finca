@@ -38,14 +38,14 @@
     data(){
     return{ 
       testData: [
-      {ID:"01", Name: "Abiola Esther", Ocupation:"Computer Science", Gender:"Female", Age:"17"},
-     {ID:"02", Name: "Robert V. Kratz", Ocupation:"Philosophy", Gender:"Male", Age:'19'},
-      {ID:"03", Name: "Kristen Anderson", Ocupation:"Economics", Gender:"Female", Age:'20'},
-     {ID:"04", Name: "Adam Simon", Ocupation:"Food science", Gender:"Male", Age:'21'},
-      {ID:"05", Name: "Daisy Katherine", Ocupation:"Business studies", Gender:"Female", Age:'22'},  
+      {ID:"01", Especie: "Bovino", Categoría:"Computer Science", Año:"1777", Mes:"17", Altas: "0", Bajas: "0"},
+     {ID:"02", Especie: "Equino", Categoría:"Philosophy", Año:"2012", Mes:'19', Altas: "0", Bajas: "5"},
+      {ID:"03", Especie: "Porcino", Categoría:"Economics", Año:"2020", Mes:'20', Altas: "4", Bajas: "3"},
+     {ID:"04", Especie: "Aviar", Categoría:"Food science", Año:"2020", Mes:'21', Altas: "0", Bajas: "4"},
+      {ID:"05", Especie: "Otro", Categoría:"Business studies", Año:"2021", Mes:'22', Altas: "23", Bajas: "0"},  
     ],
     testFields: [
-      'ID','Name','Ocupation','Gender','Age'
+      'ID','Especie','Categoría','Año','Mes', 'Altas', 'Bajas'
     ]
     }
   },  

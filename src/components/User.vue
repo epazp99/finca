@@ -7,8 +7,7 @@
     <button type="button" class="button button--accept" @click="showModal = true">New user</button>
     <button type="button" class="button button--edit">Edit user</button>
     <button type="button" class="button button--cancel">Delete user</button>
-
-    <div v-if="show1">NEWWWWWWWWWWWW</div>
+ 
      <!-- <Modal v-if="showModal"></Modal>     -->
 
   </div>

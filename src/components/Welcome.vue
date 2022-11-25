@@ -1,7 +1,8 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
 <template> 
-    <br/> <br/>    <h1 style="text-align:center">Welcome</h1> 
-  </template>
+    <br/> <br/>    
+    <h1 style="text-align:center">Welcome</h1> 
+</template>
   
   <script> 
   export default {
