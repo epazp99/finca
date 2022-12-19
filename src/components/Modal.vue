@@ -53,51 +53,41 @@
   </transition>
   </template>
   
-  <script>  
-
-  export default {
-    name: 'ModalComponent',
-    data(){
-      return{ 
-    errors: [],
-    name: null,
-    age: null,
-    email: null,
-    number: null
-      }
-    },
-    methods:{
-      enviarFormulario() {
-        if (this.name && this.age && this.email && this.number) {
+  <script>
+export default {
+  name: "ModalComponent",
+  data() {
+    return {
+      errors: [],
+      name: null,
+      age: null,
+      email: null,
+      number: null,
+    };
+  },
+  methods: {
+    enviarFormulario() {
+      if (this.name && this.age && this.email && this.number) {
         this.showModal = false;
-        
-        }
-        console.log("dddd");
-        this.errors = [];
-
-if (!this.name) 
-  this.errors.push('El nombre es obligatorio.');
-
-if (!this.age) 
-  this.errors.push('La edad es obligatoria.');
-
-  if (!this.email) 
-  this.errors.push('El correo es obligatorio.');
-
-if (!this.number) 
-  this.errors.push('El numero es obligatoria.');
-
-
-e.preventDefault();
       }
-    } 
-  }
-  
-  </script>
+      console.log("dddd");
+      this.errors = [];
+
+      if (!this.name) this.errors.push("El nombre es obligatorio.");
+
+      if (!this.age) this.errors.push("La edad es obligatoria.");
+
+      if (!this.email) this.errors.push("El correo es obligatorio.");
+
+      if (!this.number) this.errors.push("El numero es obligatoria.");
+
+      e.preventDefault();
+    },
+  },
+};
+</script>
  
 <style lang="scss">
-
-
 .modal {
   position: absolute;
   position: fixed;
@@ -107,13 +97,13 @@ e.preventDefault();
   left: 0;
   margin: auto;
   text-align: center;
-  width: 40%; 
+  width: 40%;
   height: fit-content;
   max-width: 100%;
   padding: 2rem;
   border-radius: 1rem;
   box-shadow: 0 5px 5px rgba(0, 0, 0, 0.2);
-  background: #FFF;
+  background: #fff;
   z-index: 999;
   transform: none;
 }
@@ -122,7 +112,7 @@ e.preventDefault();
 }
 
 .modal-overlay {
-  content: '';
+  content: "";
   position: absolute;
   position: fixed;
   top: 0;
@@ -135,19 +125,19 @@ e.preventDefault();
   cursor: pointer;
 }
 
-.modal-exit{
-  font-size:25px;
+.modal-exit {
+  font-size: 25px;
   padding-left: 85%;
-  padding-top:0px;
-  margin-top:0px;
+  padding-top: 0px;
+  margin-top: 0px;
   cursor: pointer;
   color: gray;
 }
- 
+
 /* ---------------------------------- */
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity .4s linear;
+  transition: opacity 0.4s linear;
 }
 
 .fade-enter,
@@ -166,20 +156,18 @@ e.preventDefault();
   transform: scale(0.3) translateY(-50%);
 }
 
+.input-modal {
+  width: 50%;
+  padding: 1.5%;
+  border: 1px solid #aaa;
+  border-radius: 10px;
+  outline: none;
+  box-sizing: border-box;
+  transition: 0.3s;
+}
 
-
-.input-modal{
-    width:50%; 
-    padding: 1.5%;
-    border:1px solid #aaa;
-    border-radius:10px; 
-    outline:none;
-    box-sizing:border-box;
-    transition:.3s;
-  }
-  
-.input-modal:focus{
-    border-color:dodgerBlue;
-    box-shadow:0 0 8px 0 dodgerBlue; 
-  }
+.input-modal:focus {
+  border-color: dodgerBlue;
+  box-shadow: 0 0 8px 0 dodgerBlue;
+}
 </style>

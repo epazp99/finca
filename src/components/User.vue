@@ -54,7 +54,7 @@
   </div>
   <p v-if="errors.length">
     <br/>
-    <b style="color:#EB5E30">Debe llenar todos los campos</b>
+     <b style="color:#EB5E30">Debe llenar todos los campos</b>
     <ul> 
       <!-- <li v-for="error in errors">{{ error }}</li> -->
     </ul>
