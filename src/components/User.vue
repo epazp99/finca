@@ -9,6 +9,7 @@
     <button type="button" class="button button--cancel">Delete user</button>
  
      <!-- <Modal v-if="showModal"></Modal>     -->
+ 
 
   </div>
 

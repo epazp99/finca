@@ -10,6 +10,8 @@
         <th  v-for="field in testFields" :key='field' @click="sortTable(field)" > 
           {{field}}  
          </th>
+
+        <th colspan="2">Actions</th>  
       </tr>
     </thead>
     <tbody>
