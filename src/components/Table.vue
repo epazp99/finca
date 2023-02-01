@@ -17,7 +17,7 @@
           <tr>
             <!-- loop through each value of the fields to get the table header -->
             <th
-              v-for="field in testFields"
+              v-for="field in testFieldsR"
               :key="field"
               @click="sortTable(field)"
             >
@@ -29,7 +29,7 @@
         </thead>
         <tbody>
           <!-- Loop through the list get the each student data -->
-          <tr v-for="item in testData" :key="item">
+          <tr v-for="item in dataTest" :key="item">
             <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
 
             <th class="trackB">
@@ -97,6 +97,9 @@
 </template>
   
   <script>
+
+import { ref, onMounted } from 'vue';
+
 export default {
   name: "TableComponent",
   props: {
@@ -108,67 +111,107 @@ export default {
       type: Array,
     },
   },
-  data() {
-    return {
-      testData: [
-        {
-          ID: "01",
-          Especie: "Bovino",
-          Categoría: "Computer Science",
-          Año: "1777",
-          Mes: "17",
-          Altas: "0",
-          Bajas: "0",
-        },
-        {
-          ID: "02",
-          Especie: "Equino",
-          Categoría: "Philosophy",
-          Año: "2012",
-          Mes: "19",
-          Altas: "0",
-          Bajas: "5",
-        },
-        {
-          ID: "03",
-          Especie: "Porcino",
-          Categoría: "Economics",
-          Año: "2020",
-          Mes: "20",
-          Altas: "4",
-          Bajas: "3",
-        },
-        {
-          ID: "04",
-          Especie: "Aviar",
-          Categoría: "Food science",
-          Año: "2020",
-          Mes: "21",
-          Altas: "0",
-          Bajas: "4",
-        },
-        {
-          ID: "05",
-          Especie: "Otro",
-          Categoría: "Business studies",
-          Año: "2021",
-          Mes: "22",
-          Altas: "23",
-          Bajas: "0",
-        },
-      ],
-      testFields: [
-        "ID",
+  setup() {
+    let dataTest = ref(null);
+    let loading = ref(true);
+    let error = ref(null);
+    const testFields= ref([
+    "id",
+    "name",
+    "idFinca", 
+        "especie",
+        "category",
+        "anno",
+        "mes", 
+        "bajas",
+        "altas",
+      ]);
+      const testFieldsR= ref([
+    "Id",
+    "Nombre",
+    "idFinca", 
         "Especie",
         "Categoría",
         "Año",
-        "Mes",
-        "Altas",
+        "Mes", 
         "Bajas",
-      ],
-      deleteD: false,
+        "Altas",
+      ]);
+     let deleteD = ref(false);
+
+    async function fetchData() {
+    loading.value = true;
+    const url = "http://localhost:9707/apis/animals/";//"http://jsonplaceholder.typicode.com/posts";
+    const r = await fetch(url);
+    const data = await r.json(); 
+    dataTest.value = data;
+    loading.value = false;
+   }
+  
+    onMounted(() => {
+      fetchData();
+    });
+
+    return {
+      dataTest,
+      loading,
+      error,
+      testFields,
+      deleteD,
+      testFieldsR
     };
-  },
+  },    
+  // data() {
+  //   return {
+  //     testData: [
+  //       {
+  //         ID: "01",
+  //         Especie: "Bovino",
+  //         Categoría: "Computer Science",
+  //         Año: "1777",
+  //         Mes: "17",
+  //         Altas: "0",
+  //         Bajas: "0",
+  //       },
+  //       {
+  //         ID: "02",
+  //         Especie: "Equino",
+  //         Categoría: "Philosophy",
+  //         Año: "2012",
+  //         Mes: "19",
+  //         Altas: "0",
+  //         Bajas: "5",
+  //       },
+  //       {
+  //         ID: "03",
+  //         Especie: "Porcino",
+  //         Categoría: "Economics",
+  //         Año: "2020",
+  //         Mes: "20",
+  //         Altas: "4",
+  //         Bajas: "3",
+  //       },
+  //       {
+  //         ID: "04",
+  //         Especie: "Aviar",
+  //         Categoría: "Food science",
+  //         Año: "2020",
+  //         Mes: "21",
+  //         Altas: "0",
+  //         Bajas: "4",
+  //       },
+  //       {
+  //         ID: "05",
+  //         Especie: "Otro",
+  //         Categoría: "Business studies",
+  //         Año: "2021",
+  //         Mes: "22",
+  //         Altas: "23",
+  //         Bajas: "0",
+  //       },
+  //     ], 
+  //   }
+  // },
 };
 </script>
 
