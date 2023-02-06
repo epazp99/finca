@@ -1,26 +1,23 @@
 <template>
   <div
     class="container text-center mt-5 mb-5"
-    style="margin-right: 5%; margin-left: 5%"
-  >
+    style="margin-right: 5%; margin-left: 5%">
     <h1
       class="mt-5 fw-bolder text-success"
-      style="text-align: center; color: red"
-    >
-      Finca's Database
+      style="text-align: center; color: red">
+      Animales
     </h1>
     <br />
     <br />
-    <div class="table-responsive my-5">
-      <table id="tableComponent" class="table table-striped">
+    <div class="table-responsive scrollbar my-5" id="style-1">
+      <table id="tableComponent" class="table table-striped" v-if="dataTest">
         <thead>
           <tr>
             <!-- loop through each value of the fields to get the table header -->
             <th
               v-for="field in testFieldsR"
               :key="field"
-              @click="sortTable(field)"
-            >
+              @click="sortTable(field)">
               {{ field }}
             </th>
 
@@ -29,33 +26,31 @@
         </thead>
         <tbody>
           <!-- Loop through the list get the each student data -->
-          <tr v-for="item in dataTest" :key="item">
+          <tr v-for="item in dataTest" :key="item.id">
             <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
 
-            <th class="trackB">
+            <th class="trackB" @click="updateRow(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
                 fill="black"
                 class="bi bi-pencil-fill"
-                viewBox="0 0 16 16"
-              >
+                viewBox="0 0 16 16">
                 <path
                   d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
                 />
               </svg>
             </th>
 
-            <th class="trackB" @click="deleteD = true">
+            <th class="trackB" @click="deleteItem(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
                 height="20"
                 fill="black"
                 class="bi bi-trash3"
-                viewBox="0 0 16 16"
-              >
+                viewBox="0 0 16 16">
                 <path
                   d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"
                 />
@@ -79,15 +74,13 @@
           <button
             type="submit"
             class="button button--accept"
-            @click="deleteD = false"
-          >
+            @click="deleteFinal()">
             Aceptar
           </button>
           <button
             type="submit"
             class="button button--cancel"
-            @click="deleteD = false"
-          >
+            @click="deleteD = false">
             Cancelar
           </button>
         </div>
@@ -98,12 +91,17 @@
   
   <script>
 
-import { ref, onMounted } from 'vue';
+//import { Modal } from "@/components/Modal.vue";
+
+import { ref, onMounted } from "vue";
 
 export default {
-  name: "TableComponent",
-  props: {
-    //
+  name: "AnimalesComponent",
+  components:{
+    // eslint-disable-next-line vue/no-unused-components
+   // Modal,
+  },
+  props: { 
     studentData: {
       type: Array,
     },
@@ -115,39 +113,86 @@ export default {
     let dataTest = ref(null);
     let loading = ref(true);
     let error = ref(null);
-    const testFields= ref([
-    "id",
-    "name",
-    "idFinca", 
-        "especie",
-        "category",
-        "anno",
-        "mes", 
-        "bajas",
-        "altas",
-      ]);
-      const testFieldsR= ref([
-    "Id",
-    "Nombre",
-    "idFinca", 
-        "Especie",
-        "Categoría",
-        "Año",
-        "Mes", 
-        "Bajas",
-        "Altas",
-      ]);
-     let deleteD = ref(false);
+    const testFields = ref([
+      "id",
+      "name",
+      "idFinca",
+      "especie",
+      "category",
+      "fecha",  
+    ]);
+    const testFieldsR = ref([
+      "Id",
+      "Nombre",
+      "idFinca",
+      "Especie",
+      "Categoría",
+      "Fecha", 
+    ]);
+    let deleteD = ref(false);
+    let idTemp = ref("");
 
-    async function fetchData() {
-    loading.value = true;
-    const url = "http://localhost:9707/apis/animals/";//"http://jsonplaceholder.typicode.com/posts";
-    const r = await fetch(url);
-    const data = await r.json(); 
-    dataTest.value = data;
-    loading.value = false;
-   }
-  
+    let data = ref({
+      name: "pruebaaaa",
+      especie: "fff",
+      category: "frtw4",
+      anno: "frtw4",
+      mes: "frtw4",
+      bajas: "frtw4",
+      altas: "frtw4",
+    }); 
+
+    const fetchData = async () => {
+      loading.value = true;
+      const url = "http://localhost:9707/apis/animals/"; //"http://jsonplaceholder.typicode.com/posts";
+      const r = await fetch(url);
+      const data = await r.json();
+      dataTest.value = data;
+      loading.value = false;
+
+      //simplificar fecha
+      dataTest.value.forEach(element => { element.fecha = element?.fecha?.substring(0, 10) }); 
+    };
+
+    function deleteItem(id) {
+      deleteD.value = true;
+      idTemp.value = id;
+    }
+
+    function deleteFinal() {
+      deleteRow(idTemp.value);
+      deleteD.value = false;
+    }
+
+    async function deleteRow(id) {
+      const url = await fetch(`http://localhost:9707/apis/animals/${id}`, {
+        method: "DELETE",
+      });
+      fetchData();
+    }
+
+    async function addRow() {
+      const url = await fetch(`http://localhost:9707/apis/animals/`, {
+        method: "POST",
+        body: JSON.stringify(data.value),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      fetchData();
+    }
+
+    async function updateRow(id) {
+      const url = await fetch(`http://localhost:9707/apis/animals/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(data.value),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+      fetchData();
+    }
+
     onMounted(() => {
       fetchData();
     });
@@ -158,27 +203,34 @@ export default {
       error,
       testFields,
       deleteD,
-      testFieldsR
+      testFieldsR,
+      deleteItem,
+      deleteFinal,
+      fetchData,
+      addRow,
+      updateRow, 
     };
-  },    
+  },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 th,
 td {
   padding: 15px !important;
   border-radius: 12px;
   border-color: lightgray !important;
+  width: auto;
 }
 
 th {
   background-color: #42b983 !important;
   color: white;
+  width: auto;
 }
 
 .trackB {
-  width: 5%;
+  width: auto;
 }
 
 .trackB:hover {
@@ -190,6 +242,7 @@ table {
   caption-side: bottom;
   border-collapse: collapse;
   text-align: center;
+  width: auto;
 }
 caption {
   padding-top: 0.5rem;
@@ -200,6 +253,7 @@ caption {
 th {
   text-align: inherit;
   text-align: -webkit-match-parent;
+  width: auto;
 }
 tbody,
 td,
@@ -210,6 +264,7 @@ tr {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  width: auto;
 }
 label {
   display: inline-block;
@@ -384,10 +439,14 @@ label {
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
 }
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+//.table-responsive {
+// overflow-x: auto;
+// overflow-y: auto;
+// -webkit-overflow-scrolling: touch;
+
+// height: auto ;
+// max-height:580px;
+//}
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     overflow-x: auto;
@@ -439,5 +498,36 @@ label {
 }
 .mt-auto {
   margin-top: auto !important;
+}
+
+.scrollbar {
+  height: auto;
+  width: auto;
+  max-height: 580px;
+  max-width: 100%;
+  background: #f5f5f5;
+}
+
+/*
+ *  STYLE 1
+ */
+
+#style-1::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
 </style>

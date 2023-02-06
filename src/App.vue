@@ -37,8 +37,14 @@ export default {
         },
         { link: "/users", name: "User", tooltip: "User", icon: "bx-user" },
         {
-          link: "/tables",
-          name: "Tables",
+          link: "/animales",
+          name: "Animales",
+          tooltip: "Tables",
+          icon: "bx-table",
+        },
+        {
+          link: "/cultivos",
+          name: "Cultivos",
           tooltip: "Tables",
           icon: "bx-table",
         },

@@ -7,11 +7,11 @@
       class="mt-5 fw-bolder text-success"
       style="text-align: center; color: red"
     >
-      Finca's Database
+      Cultivos
     </h1>
     <br />
     <br />
-    <div class="table-responsive my-5">
+    <div class="table-responsive scrollbar my-5" id="style-1"> 
       <table id="tableComponent" class="table table-striped">
         <thead>
           <tr>
@@ -24,7 +24,7 @@
               {{ field }}
             </th>
 
-            <th colspan="2">Actions</th>
+            <th colspan="3">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -47,7 +47,7 @@
               </svg>
             </th>
 
-            <th class="trackB" @click="deleteD = true">
+            <th class="trackB" @click="deleteItem(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -101,7 +101,7 @@
 import { ref, onMounted } from 'vue';
 
 export default {
-  name: "TableComponent",
+  name: "CultivosComponent",
   props: {
     //
     studentData: {
@@ -119,34 +119,41 @@ export default {
     "id",
     "name",
     "idFinca", 
-        "especie",
-        "category",
-        "anno",
-        "mes", 
-        "bajas",
-        "altas",
+        "tipo", 
+        "plan", 
+        "real", 
+        "areaExistencia",
+        "tierraMov", 
+        "tierraLista", 
+        "fecha",
       ]);
       const testFieldsR= ref([
     "Id",
     "Nombre",
-    "idFinca", 
-        "Especie",
-        "Categoría",
-        "Año",
-        "Mes", 
-        "Bajas",
-        "Altas",
+    "IdFinca", 
+        "Tipo", 
+        "Plan",
+        "Real",   
+        "Area Existencia",
+        "Tierra Mov",
+        "Tierra Lista",  
+        "Fecha",
+    
       ]);
      let deleteD = ref(false);
 
     async function fetchData() {
     loading.value = true;
-    const url = "http://localhost:9707/apis/animals/";//"http://jsonplaceholder.typicode.com/posts";
+    const url = "http://localhost:9707/apis/cultivos/";//"http://jsonplaceholder.typicode.com/posts";
     const r = await fetch(url);
     const data = await r.json(); 
     dataTest.value = data;
     loading.value = false;
-   }
+   };
+
+   function deleteItem(id){ 
+    deleteD.value = true; 
+   };
   
     onMounted(() => {
       fetchData();
@@ -158,27 +165,33 @@ export default {
       error,
       testFields,
       deleteD,
-      testFieldsR
+      testFieldsR,
+      deleteItem
     };
   },    
 };
 </script>
 
-<style lang="scss">
+
+
+<style scoped lang="scss">
 th,
 td {
   padding: 15px !important;
   border-radius: 12px;
   border-color: lightgray !important;
+  width: auto;
 }
 
 th {
   background-color: #42b983 !important;
   color: white;
+  width: auto;
+  
 }
 
-.trackB {
-  width: 5%;
+.trackB { 
+  width: auto;
 }
 
 .trackB:hover {
@@ -190,16 +203,16 @@ table {
   caption-side: bottom;
   border-collapse: collapse;
   text-align: center;
+  width: auto;
 }
 caption {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
   color: #6c757d;
   text-align: left;
-}
-th {
-  text-align: inherit;
-  text-align: -webkit-match-parent;
+} 
+table th {
+  vertical-align:text-top;
 }
 tbody,
 td,
@@ -210,6 +223,7 @@ tr {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  width: auto;
 }
 label {
   display: inline-block;
@@ -230,6 +244,8 @@ label {
   color: var(--bs-table-color);
   vertical-align: top;
   border-color: var(--bs-table-border-color);
+  
+  
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
@@ -239,6 +255,7 @@ label {
 }
 .table > tbody {
   vertical-align: inherit;
+  
 }
 .table > thead {
   vertical-align: bottom;
@@ -384,10 +401,15 @@ label {
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
 }
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+//.table-responsive {
+  // overflow-x: auto;
+  // overflow-y: auto;
+  // -webkit-overflow-scrolling: touch;
+
+  
+  // height: auto ;
+  // max-height:580px; 
+//}
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     overflow-x: auto;
@@ -440,4 +462,42 @@ label {
 .mt-auto {
   margin-top: auto !important;
 }
+
+
+
+.scrollbar
+{ 
+	height: auto;
+	width: auto;
+  max-height: 580px;
+	max-width: 100%;
+	background: #F5F5F5; 
+}
+ 
+/*
+ *  STYLE 1
+ */
+
+#style-1::-webkit-scrollbar-track
+{
+  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	border-radius: 10px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar
+{
+	width: 12px;
+	background-color: #F5F5F5;
+}
+
+#style-1::-webkit-scrollbar-thumb
+{
+	border-radius: 10px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	background-color: #555;
+}
+
 </style>
