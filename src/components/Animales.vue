@@ -1,12 +1,19 @@
 <template>
   <div
     class="container text-center mt-5 mb-5"
-    style="margin-right: 5%; margin-left: 5%">
-    <h1
-      class="mt-5 fw-bolder text-success"
-      style="text-align: center; color: red">
-      Animales
-    </h1>
+    style="margin-right: 5%; margin-left: 5%"
+  > 
+
+    <div class="row" style="display:flex;margin:0 auto">
+    <div style="text-align:start;justify-content:start;padding-top:1%;">
+      Categoría: &nbsp; <input type="text" @change="filterTodo(activeFilter)" v-model="activeFilter">
+    </div>
+
+    <div style="text-align:end;justify-content:end;margin:0 auto;padding-left:73%;">
+      <ModalAdd :title="'Agregar nuevo animal'" :list="listModal" v-on:update="fetchData()"/>
+    </div> 
+    </div>
+    
     <br />
     <br />
     <div class="table-responsive scrollbar my-5" id="style-1">
@@ -17,7 +24,8 @@
             <th
               v-for="field in testFieldsR"
               :key="field"
-              @click="sortTable(field)">
+              @click="sortTable(field)"
+            >
               {{ field }}
             </th>
 
@@ -26,9 +34,9 @@
         </thead>
         <tbody>
           <!-- Loop through the list get the each student data -->
-          <tr v-for="item in dataTest" :key="item.id">
+          <tr v-for="item in dataTest" :key="item.id" v-show="getCategory(item.category)"> 
             <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
-
+           
             <th class="trackB" @click="updateRow(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +44,8 @@
                 height="20"
                 fill="black"
                 class="bi bi-pencil-fill"
-                viewBox="0 0 16 16">
+                viewBox="0 0 16 16"
+              >
                 <path
                   d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z"
                 />
@@ -50,12 +59,13 @@
                 height="20"
                 fill="black"
                 class="bi bi-trash3"
-                viewBox="0 0 16 16">
+                viewBox="0 0 16 16"
+              >
                 <path
                   d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"
                 />
-              </svg>
-            </th>
+              </svg> 
+            </th> 
           </tr>
         </tbody>
       </table>
@@ -90,44 +100,42 @@
 </template>
   
   <script>
-
-//import { Modal } from "@/components/Modal.vue";
+import  ModalAdd from "@/components/ModalAdd.vue";
 
 import { ref, onMounted } from "vue";
 
 export default {
   name: "AnimalesComponent",
-  components:{
+  components: {
     // eslint-disable-next-line vue/no-unused-components
-   // Modal,
+    ModalAdd
+    ,
   },
-  props: { 
+  props: {
     studentData: {
       type: Array,
     },
     fields: {
       type: Array,
     },
-  },
+  }, 
   setup() {
     let dataTest = ref(null);
     let loading = ref(true);
     let error = ref(null);
     const testFields = ref([
       "id",
-      "name",
-      "idFinca",
+      "name", 
       "especie",
       "category",
-      "fecha",  
+      "fecha",
     ]);
     const testFieldsR = ref([
       "Id",
-      "Nombre",
-      "idFinca",
+      "Nombre", 
       "Especie",
       "Categoría",
-      "Fecha", 
+      "Fecha",
     ]);
     let deleteD = ref(false);
     let idTemp = ref("");
@@ -140,7 +148,14 @@ export default {
       mes: "frtw4",
       bajas: "frtw4",
       altas: "frtw4",
-    }); 
+    });
+
+    let listModal = ref([
+      {name :"Nombre", type: "text", realName: "name"}, 
+      {name :"Especie", type: "text", realName: "especie"},
+      {name :"Categoría", type: "text", realName: "category"},
+      {name :"Fecha", type: "date", realName: "fecha"},
+     ]);
 
     const fetchData = async () => {
       loading.value = true;
@@ -151,7 +166,9 @@ export default {
       loading.value = false;
 
       //simplificar fecha
-      dataTest.value.forEach(element => { element.fecha = element?.fecha?.substring(0, 10) }); 
+      dataTest.value.forEach((element) => {
+        element.fecha = element?.fecha?.substring(0, 10);
+      });
     };
 
     function deleteItem(id) {
@@ -191,6 +208,27 @@ export default {
         },
       }).then((res) => res.json());
       fetchData();
+    } 
+
+    const filters = ref(['All', 'Personal', 'Work', 'Other']);
+    let activeFilter = ref('');
+    let actual = ref();
+
+    function filterTodo(type) {
+      if(type != '')
+      activeFilter.value = type; 
+    }
+
+    function getTodos (){
+      if (activeFilter.value === 'All') {
+        return todos.value;
+      }
+      return todos.value.filter((item) => item.type === activeFilter.value);
+    };
+
+    function getCategory(cat){
+
+      return activeFilter.value != null && activeFilter.value != '' ? activeFilter.value == cat : true;
     }
 
     onMounted(() => {
@@ -208,7 +246,14 @@ export default {
       deleteFinal,
       fetchData,
       addRow,
-      updateRow, 
+      updateRow,
+      activeFilter,
+      filters,
+      filterTodo,
+      getTodos,
+      getCategory,
+      actual,
+      listModal
     };
   },
 };

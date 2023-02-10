@@ -11,7 +11,7 @@
     </h1>
     <br />
     <br />
-    <div class="table-responsive scrollbar my-5" id="style-1"> 
+    <div class="table-responsive scrollbar my-5" id="style-1">
       <table id="tableComponent" class="table table-striped">
         <thead>
           <tr>
@@ -97,8 +97,7 @@
 </template>
   
   <script>
-
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 
 export default {
   name: "CultivosComponent",
@@ -115,46 +114,45 @@ export default {
     let dataTest = ref(null);
     let loading = ref(true);
     let error = ref(null);
-    const testFields= ref([
-    "id",
-    "name",
-    "idFinca", 
-        "tipo", 
-        "plan", 
-        "real", 
-        "areaExistencia",
-        "tierraMov", 
-        "tierraLista", 
-        "fecha",
-      ]);
-      const testFieldsR= ref([
-    "Id",
-    "Nombre",
-    "IdFinca", 
-        "Tipo", 
-        "Plan",
-        "Real",   
-        "Area Existencia",
-        "Tierra Mov",
-        "Tierra Lista",  
-        "Fecha",
-    
-      ]);
-     let deleteD = ref(false);
+    const testFields = ref([
+      "id",
+      "name",
+      "idFinca",
+      "tipo",
+      "plan",
+      "real",
+      "areaExistencia",
+      "tierraMov",
+      "tierraLista",
+      "fecha",
+    ]);
+    const testFieldsR = ref([
+      "Id",
+      "Nombre",
+      "IdFinca",
+      "Tipo",
+      "Plan",
+      "Real",
+      "Area Existencia",
+      "Tierra Mov",
+      "Tierra Lista",
+      "Fecha",
+    ]);
+    let deleteD = ref(false);
 
     async function fetchData() {
-    loading.value = true;
-    const url = "http://localhost:9707/apis/cultivos/";//"http://jsonplaceholder.typicode.com/posts";
-    const r = await fetch(url);
-    const data = await r.json(); 
-    dataTest.value = data;
-    loading.value = false;
-   };
+      loading.value = true;
+      const url = "http://localhost:9707/apis/cultivos/"; //"http://jsonplaceholder.typicode.com/posts";
+      const r = await fetch(url);
+      const data = await r.json();
+      dataTest.value = data;
+      loading.value = false;
+    }
 
-   function deleteItem(id){ 
-    deleteD.value = true; 
-   };
-  
+    function deleteItem(id) {
+      deleteD.value = true;
+    }
+
     onMounted(() => {
       fetchData();
     });
@@ -166,9 +164,9 @@ export default {
       testFields,
       deleteD,
       testFieldsR,
-      deleteItem
+      deleteItem,
     };
-  },    
+  },
 };
 </script>
 
@@ -187,10 +185,9 @@ th {
   background-color: #42b983 !important;
   color: white;
   width: auto;
-  
 }
 
-.trackB { 
+.trackB {
   width: auto;
 }
 
@@ -210,9 +207,9 @@ caption {
   padding-bottom: 0.5rem;
   color: #6c757d;
   text-align: left;
-} 
+}
 table th {
-  vertical-align:text-top;
+  vertical-align: text-top;
 }
 tbody,
 td,
@@ -244,8 +241,6 @@ label {
   color: var(--bs-table-color);
   vertical-align: top;
   border-color: var(--bs-table-border-color);
-  
-  
 }
 .table > :not(caption) > * > * {
   padding: 0.5rem 0.5rem;
@@ -255,7 +250,6 @@ label {
 }
 .table > tbody {
   vertical-align: inherit;
-  
 }
 .table > thead {
   vertical-align: bottom;
@@ -402,13 +396,12 @@ label {
   border-color: var(--bs-table-border-color);
 }
 //.table-responsive {
-  // overflow-x: auto;
-  // overflow-y: auto;
-  // -webkit-overflow-scrolling: touch;
+// overflow-x: auto;
+// overflow-y: auto;
+// -webkit-overflow-scrolling: touch;
 
-  
-  // height: auto ;
-  // max-height:580px; 
+// height: auto ;
+// max-height:580px;
 //}
 @media (max-width: 575.98px) {
   .table-responsive-sm {
@@ -463,41 +456,34 @@ label {
   margin-top: auto !important;
 }
 
-
-
-.scrollbar
-{ 
-	height: auto;
-	width: auto;
+.scrollbar {
+  height: auto;
+  width: auto;
   max-height: 580px;
-	max-width: 100%;
-	background: #F5F5F5; 
+  max-width: 100%;
+  background: #f5f5f5;
 }
- 
+
 /*
  *  STYLE 1
  */
 
-#style-1::-webkit-scrollbar-track
-{
-  box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	border-radius: 10px;
-	background-color: #F5F5F5;
+#style-1::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f5f5f5;
 }
 
-#style-1::-webkit-scrollbar
-{
-	width: 12px;
-	background-color: #F5F5F5;
+#style-1::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
 }
 
-#style-1::-webkit-scrollbar-thumb
-{
-	border-radius: 10px;
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-  box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	background-color: #555;
+#style-1::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
-
 </style>

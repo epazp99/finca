@@ -4,7 +4,7 @@ import Welcome from "./components/Welcome.vue";
 import Table from './components/Table.vue'
 import Cultivos from './components/Cultivos.vue'
 import Animales from './components/Animales.vue'
-import User from './components/User.vue'
+import ModalAdd from './components/ModalAdd.vue'
 
 const routes = [
   {
@@ -29,8 +29,8 @@ const routes = [
   }, 
   {
     path: "/users",
-    name: "User",
-    component: User
+    name: "ModalAdd",
+    component: ModalAdd
   }
 ];
 

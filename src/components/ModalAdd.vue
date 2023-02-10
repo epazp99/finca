@@ -1,17 +1,12 @@
 <!-- eslint-disable vue/no-multiple-template-root -->
-<template> 
-<div style="text-align:center;justify-content:center">
-    <br/> <br/>  <h1>Users</h1>
-    <br/> <br/> <br/>
- 
-    <button type="button" class="button button--accept" @click="showModal = true">New user</button>
-    <button type="button" class="button button--edit">Edit user</button>
-    <button type="button" class="button button--cancel">Delete user</button>
- 
-     <!-- <Modal v-if="showModal"></Modal>     -->
- 
-
-  </div>
+<template>  
+ <button type="button" class="button button--accept" @click="showModal = true">
+  <p>Nuevo</p>&nbsp;&nbsp;
+  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" class="bi bi-plus-circle"  viewBox="0 0 16 16">
+   <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+   <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"/>
+  </svg>
+</button> 
 
   <transition name="fade" appear>
     <div class="modal-overlay" 
@@ -24,31 +19,18 @@
          v-if="showModal">
          <a @click="cleanForm()" class="modal-exit">x</a>
 
-      <h1>Insert a new user</h1>
+      <h2>{{title}}</h2>
+      <br/>  
       <hr/>
       <br/>   <br/> 
       <div class="content-modal">
         <form method="POST" name="sentMessage" id="contactForm" @submit="sendForm()" action="https://vuejs.org/" validate="novalidate">
       <div class="row">
-      <div style="justify-content:center">
-       Name:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="text" v-model="name" placeholder="Your name" required="required" data-validation-required-message="Please enter your name">
-      </div>
-      <br/>
-      <div style="justify-content:center">
-       Email:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="email" v-model="email" placeholder="Your email" required="required" data-validation-required-message="Please enter your email">
-      </div>
-      <br/>
-      <div style="justify-content:center">
-       Age:  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-       <input class="input-modal" type="number" v-model="age" placeholder="Your age" required="required" data-validation-required-message="Please enter your age">
-      </div>
-      <br/>
-      <div style="justify-content:center">
-       Number:  &nbsp;&nbsp;
-       <input class="input-modal" type="number" v-model="number" placeholder="Your number" required="required" data-validation-required-message="Please enter your number">
-      </div>
+      <div v-for="item in list" :key="item">
+       {{item.name}}: 
+       <input class="input-modal" :ref="item.name" style="margin-left:5%" :type="item.type" :placeholder="item.name" required="required" :data-validation-required-message="'Please enter'+item.name">
+       <br/><br/>
+      </div> 
     </div>
     </form>
   </div>
@@ -64,59 +46,72 @@
       <button type="button" class="button button--accept" @click="sendForm()">Aceptar</button>
       <button type="button" class="button button--cancel" @click="cleanForm()">Cancelar</button>
     </div>
-
-    
+ 
   </div>
   </transition> 
      
 </template>
 
-<script>
-//import { Modal } from "./components/Modal.vue";
+<script> 
 
 export default {
-  name: "UserComponent",
-  components: {
-    // eslint-disable-next-line vue/no-unused-components
-    // Modal,
-  },
+  name: "ModalAddComponent", 
   props: {
     text: null,
+    title: String,
+    list: Array
     // eslint-disable-next-line vue/require-prop-type-constructor
   },
   data() {
     return {
       showModal: false,
-      errors: [],
-      name: null,
-      age: null,
-      email: null,
-      number: null,
+      errors: [], 
     };
   },
+  emits: ['update'],
   methods: {
-    sendForm() {
-      if (!this.name) this.errors.push("El nombre es obligatorio.");
+    sendForm() { 
+    this.list.forEach(element =>{ 
+      if(this.$refs[element.name][0].value == ''||this.$refs[element.name][0].value == null)
+      this.errors.push("campo obligatorio");
+    }) 
+   
+    var tempcont = 0;
+    this.list.forEach(element =>{  
+      if(this.$refs[element.name][0].value != ''&&this.$refs[element.name][0].value!= null)
+      tempcont ++;
+    }) 
+ 
+    if (tempcont==this.list.length) {
+     this.insert();
+    }
+    }, 
+    insert: async function() {
+      let data = {};
 
-      if (!this.age) this.errors.push("La edad es obligatoria.");
+      this.list.forEach((element, index) =>{    
+      data[element.realName] = this.$refs[element.name][0].value;
+      }) 
+ 
+      const url = await fetch(`http://localhost:9707/apis/animals/`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
 
-      if (!this.email) this.errors.push("El correo es obligatorio.");
+      this.showModal = false; 
+      this.errors = [];
+ 
+     this.$emit("update")
 
-      if (!this.number) this.errors.push("El numero es obligatoria.");
-
-      if (this.name && this.age && this.email && this.number) {
-        this.cleanForm();
-      }
-    },
+    }, 
     cleanForm() {
-      this.showModal = false;
-      this.name = null;
-      this.age = null;
-      this.email = null;
-      this.number = null;
+      this.showModal = false; 
       this.errors = [];
     },
-  },
+  }, 
 };
 </script>
 
@@ -127,26 +122,28 @@ export default {
   margin: 0 15px;
   padding: 15px 0;
   min-width: 120px;
-  border-radius: 30px;
+  border-radius: 23px;
   border: none;
   transition: all 0.3s linear;
-  cursor: pointer;
-  text-transform: uppercase;
+  cursor: pointer; 
   font-weight: 700;
-  letter-spacing: 0.2em;
+  font-size: medium; 
+  display: flex;
+  justify-content: center;
 }
 
 .button--accept {
-  background-color: lighten(#5c8f22, 25);
+  background-color: #42b983;//lighten(#5c8f22, 25);
+  color: white;
 
   &:hover {
-    background-color: lighten(#5c8f22, 10);
+    background-color: #5ecc9a !important;//lighten(#5c8f22, 10);
   }
 }
-
+ 
 .button--cancel {
   background-color: lighten(#eb5e30, 10);
-
+  color: white;
   &:hover {
     background-color: #eb5e30;
   }
