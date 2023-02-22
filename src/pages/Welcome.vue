@@ -2,14 +2,16 @@
 <template>
   <br />
   <br />
+  <div style="text-align: center">
   <h1 style="text-align: center">Welcome</h1>
 
+  <br />
+  <br />
 
 
+   <img src="./menu.png"/>
 
-   
-
-  
+  </div>
 </template>
   
   <script>

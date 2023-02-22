@@ -1,22 +1,24 @@
 
 import { createRouter, createWebHistory } from "vue-router";
-import Welcome from "./components/Welcome.vue";
-import Table from './components/Table.vue'
-import Cultivos from './components/Cultivos.vue'
-import Animales from './components/Animales.vue'
+import Welcome from "./pages/Welcome.vue"; 
+import Cultivos from './pages/Cultivos.vue'
+import Animales from './pages/Animales.vue'
+import Equipos from './pages/Equipos.vue'
 import ModalAdd from './components/ModalAdd.vue'
+import User from './pages/User.vue'
+import Provincias from './pages/Provincias.vue'
+import Altas from './pages/Altas.vue'
+import Bajas from './pages/Bajas.vue'
+import Datos from './pages/Datos.vue'
+import Resultados from './pages/Resultados.vue'
+import Hechos from './pages/Hechos.vue' 
 
 const routes = [
   {
     path: "/",
     name: "Welcome",
     component: Welcome
-  },
-  {
-    path: "/tables",
-    name: "Table",
-    component: Table
-  },
+  }, 
   {
     path: "/animales",
     name: "Animales",
@@ -28,10 +30,51 @@ const routes = [
     component: Cultivos
   }, 
   {
+    path: "/equipos",
+    name: "Equipos",
+    component: Equipos
+  }, 
+  {
     path: "/users",
-    name: "ModalAdd",
-    component: ModalAdd
-  }
+    name: "User",
+    component: User
+  },
+  {
+    path: "/equipos",
+    name: "Equipos",
+    component: Equipos
+  },   
+  {
+    path: "/results",
+    name: "Resultados",
+    component: Resultados
+  }, 
+  {
+    path: "/data",
+    name: "Datos",
+    component: Datos
+  }, 
+  {
+    path: "/bajas",
+    name: "Bajas",
+    component: Bajas
+  }, 
+  {
+    path: "/altas",
+    name: "Altas",
+    component: Altas
+  }, 
+  {
+    path: "/provincias",
+    name: "Provincias",
+    component: Provincias
+  }, 
+  {
+    path: "/hechos",
+    name: "Hechos",
+    component: Hechos
+  }, 
+ 
 ];
 
 const router = createRouter({

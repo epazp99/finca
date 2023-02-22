@@ -1,19 +1,24 @@
 <template>
   <div
-    class="container text-center mt-5 mb-5"
+    class="container text-center mt-4 mb-5"
     style="margin-right: 5%; margin-left: 5%"
-  >
-    <h1
-      class="mt-5 fw-bolder text-success"
-      style="text-align: center; color: red"
-    >
-      Finca's Database
-    </h1>
+  > 
+    <div style="display:flex;margin:0 auto">
+    <div style="text-align:start;justify-content:start;padding-top:-1%;">
+      <h3 style="padding-bottom:10px">Categoría:</h3> 
+      <input type="text" @change="filterTodo(activeFilter)" v-model="activeFilter" style="border-radius:10px;height:50%;">
+    </div>
+
+    <div style="text-align:end;justify-content:end;margin:0 auto;padding-left:73%;margin-top:2%;">
+      <ModalAdd :title="'Agregar nuevo '+shortName" :table="name" :list="listModal" v-on:update="fetchData()"/>
+    </div> 
+    </div>
+    
     <br />
     <br />
-    <div class="table-responsive my-5">
-      <table id="tableComponent" class="table table-striped">
-        <thead>
+    <div class="table-responsive scrollbar my-5" id="style-1">
+      <table id="tableComponent" class="table table-striped" v-if="dataTest">
+        <thead style="position:sticky;top:0px;">
           <tr>
             <!-- loop through each value of the fields to get the table header -->
             <th
@@ -29,10 +34,10 @@
         </thead>
         <tbody>
           <!-- Loop through the list get the each student data -->
-          <tr v-for="item in dataTest" :key="item">
+          <tr v-for="item in dataTest" :key="item.id" v-show="getCategory(item)"> 
             <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
-
-            <th class="trackB">
+           
+            <th class="trackB" @click="updateRow(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -47,7 +52,7 @@
               </svg>
             </th>
 
-            <th class="trackB" @click="deleteD = true">
+            <th class="trackB" @click="deleteItem(item.id)">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -59,95 +64,109 @@
                 <path
                   d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"
                 />
-              </svg>
-            </th>
+              </svg> 
+            </th> 
           </tr>
         </tbody>
       </table>
     </div>
 
-    <transition name="fade" appear>
-      <div class="modal-overlay" v-if="deleteD"></div>
-    </transition>
-    <transition name="pop" appear>
-      <div class="modal" style="width: 30%" role="dialog" v-if="deleteD">
-        <a @click="deleteD = false" class="modal-exit">x</a>
-        <br /><br />
-        <h2>Seguro que desea eliminar?</h2>
-        <br /><br />
-        <div style="display: flex; justify-content: center">
-          <button
-            type="submit"
-            class="button button--accept"
-            @click="deleteD = false"
-          >
-            Aceptar
-          </button>
-          <button
-            type="submit"
-            class="button button--cancel"
-            @click="deleteD = false"
-          >
-            Cancelar
-          </button>
-        </div>
-      </div>
-    </transition>
+    <ModalUpdate v-if="updateD" :title="'Editar '+shortName" :id="idTemp" :table="name" :list="listModal" v-on:close="updateD = false" v-on:update="updateD = false;fetchData()"/>
+
+    <ModalDelete v-if="deleteD" :row="idTemp" :table="name" v-on:delete="fetchData()" v-on:close="deleteD = false"/>
+ 
   </div>
 </template>
   
   <script>
+import  ModalAdd from "@/components/ModalAdd.vue";
+import  ModalUpdate from "@/components/ModalUpdate.vue";
+import  ModalDelete from "@/components/ModalDelete.vue";
 
-import { ref, onMounted } from 'vue';
+import { ref, onMounted } from "vue";
 
 export default {
   name: "TableComponent",
-  props: {
-    //
-    studentData: {
-      type: Array,
-    },
-    fields: {
-      type: Array,
-    },
+  components: {
+    // eslint-disable-next-line vue/no-unused-components
+    ModalAdd,
+    // eslint-disable-next-line vue/no-unused-components
+    ModalDelete,
+     // eslint-disable-next-line vue/no-unused-components
+    ModalUpdate
   },
-  setup() {
+  props: {
+    name: {
+      type: String,
+    }, 
+    shortName: {
+      type: String,
+    }, 
+    listModal: {
+      type : Object
+    },
+    testFields: {
+      type : Object
+    },
+    testFieldsR: {
+      type : Object
+    }
+  }, 
+  setup(props) {
     let dataTest = ref(null);
     let loading = ref(true);
-    let error = ref(null);
-    const testFields= ref([
-    "id",
-    "name",
-    "idFinca", 
-        "especie",
-        "category",
-        "anno",
-        "mes", 
-        "bajas",
-        "altas",
-      ]);
-      const testFieldsR= ref([
-    "Id",
-    "Nombre",
-    "idFinca", 
-        "Especie",
-        "Categoría",
-        "Año",
-        "Mes", 
-        "Bajas",
-        "Altas",
-      ]);
-     let deleteD = ref(false);
+    let error = ref(null);  
+    let deleteD = ref(false);
+    let updateD = ref(false);
+    let idTemp = ref(""); 
 
-    async function fetchData() {
-    loading.value = true;
-    const url = "http://localhost:9707/apis/animals/";//"http://jsonplaceholder.typicode.com/posts";
-    const r = await fetch(url);
-    const data = await r.json(); 
-    dataTest.value = data;
-    loading.value = false;
-   }
-  
+    const fetchData = async () => {
+      loading.value = true;
+      const url = `http://localhost:9707/apis/${props.name}/`;
+      const r = await fetch(url);
+      const data = await r.json();
+      dataTest.value = data;
+      loading.value = false;
+
+      //simplificar fecha
+      dataTest.value.forEach((element) => {
+        element.fecha = element?.fecha?.substring(0, 10);
+      });
+    };
+
+    function deleteItem(id) { 
+      idTemp.value = id;
+      deleteD.value = true;
+    }
+ 
+    async function updateRow(id) {  
+      idTemp.value = id;
+      updateD.value = true;
+    } 
+
+    const filters = ref(['All', 'Personal', 'Work', 'Other']);
+    let activeFilter = ref('');
+    let actual = ref();
+
+    function filterTodo(type) {
+      if(type != '')
+      activeFilter.value = type; 
+    }
+
+    function getTodos (){
+      if (activeFilter.value === 'All') {
+        return todos.value;
+      }
+      return todos.value.filter((item) => item.type === activeFilter.value);
+    };
+
+    function getCategory(item){ 
+      if(props.name == 'animals')
+      return activeFilter.value != null && activeFilter.value != '' ? activeFilter.value == item.category : true;
+      else
+      return true;
+    }
+
     onMounted(() => {
       fetchData();
     });
@@ -155,30 +174,41 @@ export default {
     return {
       dataTest,
       loading,
-      error,
-      testFields,
-      deleteD,
-      testFieldsR
+      error, 
+      deleteD, 
+      deleteItem, 
+      fetchData, 
+      updateRow,
+      activeFilter,
+      filters,
+      filterTodo,
+      getTodos,
+      getCategory,
+      actual, 
+      idTemp,
+      updateD
     };
-  },    
+  },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 th,
 td {
   padding: 15px !important;
   border-radius: 12px;
   border-color: lightgray !important;
+  width: auto;
 }
 
 th {
   background-color: #42b983 !important;
   color: white;
+  width: auto;
 }
 
 .trackB {
-  width: 5%;
+  width: auto;
 }
 
 .trackB:hover {
@@ -190,6 +220,7 @@ table {
   caption-side: bottom;
   border-collapse: collapse;
   text-align: center;
+  width: auto;
 }
 caption {
   padding-top: 0.5rem;
@@ -200,6 +231,7 @@ caption {
 th {
   text-align: inherit;
   text-align: -webkit-match-parent;
+  width: auto;
 }
 tbody,
 td,
@@ -210,6 +242,7 @@ tr {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  width: auto;
 }
 label {
   display: inline-block;
@@ -384,10 +417,14 @@ label {
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
 }
-.table-responsive {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-}
+//.table-responsive {
+// overflow-x: auto;
+// overflow-y: auto;
+// -webkit-overflow-scrolling: touch;
+
+// height: auto ;
+// max-height:580px;
+//}
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     overflow-x: auto;
@@ -439,5 +476,36 @@ label {
 }
 .mt-auto {
   margin-top: auto !important;
+}
+
+.scrollbar {
+  height: auto;
+  width: auto;
+  max-height: 580px;
+  max-width: 100%;
+  background: #f5f5f5;
+}
+
+/*
+ *  STYLE 1
+ */
+
+#style-1::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar {
+  width: 12px;
+  background-color: #f5f5f5;
+}
+
+#style-1::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: #555;
 }
 </style>
