@@ -31,12 +31,12 @@ export default {
   data() {
     return {
       items: [
-        {
-          link: "/",
-          name: "Principal",
-          tooltip: "Dashboard",
-          icon: "bx-grid-alt",
-        },
+        // {
+        //   link: "/",
+        //   name: "Principal",
+        //   tooltip: "Dashboard",
+        //   icon: "bx-grid-alt",
+        // },
         { link: "/users", name: "Usuario", tooltip: "User", icon: "bx-user" },
         {
           link: "/animales",

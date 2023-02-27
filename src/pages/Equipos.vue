@@ -35,8 +35,8 @@ export default {
     let listModal = ref([
       {name :"Nombre", type: "text", realName: "name"}, 
       {name :"Parque", type: "text", realName: "parque"},
-      {name :"Activos", type: "text", realName: "activos"},
-      {name :"Incidencias", type: "text", realName: "incidencias"}, 
+      {name :"Activos", type: "number", realName: "activos"},
+      {name :"Incidencias", type: "number", realName: "incidencias"}, 
       {name :"Fecha", type: "date", realName: "fecha"},
      ]);
 

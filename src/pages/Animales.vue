@@ -1,5 +1,5 @@
 <template>
-  <Table name="animals" shortName="animal" :testFields="testFields" :testFieldsR="testFieldsR" :listModal="listModal"></Table>
+  <Table name="animals" shortName="animal" :testFields="testFields" :testFieldsR="testFieldsR" :listModal="listModal" :selectt="selectorEspecie"></Table>
 </template>
   
   <script>
@@ -32,15 +32,24 @@ export default {
 
     let listModal = ref([
       {name :"Nombre", type: "text", realName: "name"}, 
-      {name :"Especie", type: "text", realName: "especie"},
+      {name :"Especie", type: "selector", realName: "especie"},
       {name :"Categoría", type: "text", realName: "category"},
       {name :"Fecha", type: "date", realName: "fecha"},
+     ]); 
+
+     let selectorEspecie = ref([
+      {name :"Mamíferos"}, 
+      {name :"Aves"}, 
+      {name :"Peces"}, 
+      {name :"Anfibios"}, 
+      {name :"Reptiles"},  
      ]); 
 
      return {
       listModal,
       testFields,
-      testFieldsR
+      testFieldsR,
+      selectorEspecie
     };
   },
 };

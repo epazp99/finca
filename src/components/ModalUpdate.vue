@@ -10,11 +10,16 @@
          <br/>  
          <hr/>
          <br/><br/> 
-         <div class="content-modal" style="justify-content:center;text-align:center;">
+     <div class="content-modal" style="justify-content:center;text-align:center;">
        <form method="POST" name="sentMessage" id="contactForm" @submit="sendForm()" action="https://vuejs.org/" validate="novalidate"> 
          <div v-for="item in list" :key="item" class="row" style="zoom: 110%;">
            <div class="col-md-4" style="padding-left: 50px;margin-left: 50px; width:70px;">{{item.name}}: </div>
-           <div class="col-md-8" style="padding-left: 0px;margin-left: 0px; width:350px;">
+           <div v-if="item.type == 'selector'" class="col-md-8 selectContent" style="padding-left: 0px;margin-left: 0px; width:350px;">
+          <select name="select" ref="option" style="margin-left:5%" :placeholder="item.name" @mousemove="clichSelect()"  @change="onChange($event)">
+            <option v-for="s in selectt" :key="s" :value="s.name">{{ s.name }}</option> 
+          </select> 
+         </div>
+           <div v-else class="col-md-8" style="padding-left: 0px;margin-left: 0px; width:350px;">
             <input  @click="clearError()" class="input-modal" :ref="item.name" style="margin-left:5%" :type="item.type" :placeholder="item.name" required="required" :data-validation-required-message="'Please enter'+item.name"/> 
           </div>
           <br/><br/>
@@ -48,13 +53,16 @@
        title: null,
        list: Array,
        table: null,
-       id: null
+       id: null,
+       selectt: Array,
        // eslint-disable-next-line vue/require-prop-type-constructor
      },
      data() {
        return {
          showModal: true,
          errors: [],  
+         dataTest: [],
+       selectedTemp: null
        };
      },
      emits: ['update', 'close'],
@@ -63,8 +71,9 @@
       
        var tempcont = 0;
        this.list.forEach(element =>{  
+        if(element.type!='selector')
          if(this.$refs[element.name][0].value != ''&&this.$refs[element.name][0].value!= null)
-         tempcont ++;
+         tempcont ++; 
        }) 
     
        if (tempcont>0) {
@@ -76,8 +85,12 @@
        updateF: async function() {
          let data = {};
    
-         this.list.forEach((element, index) =>{
-          if(this.$refs[element.name][0].value!=null &&this.$refs[element.name][0].value!='')    
+         this.list.forEach((element, index) =>{ 
+          if(element.type=="selector"){
+            if(this.selectedTemp != null)
+            data[element.realName] = this.selectedTemp;
+          }
+         else if(this.$refs[element.name][0].value!=null &&this.$refs[element.name][0].value!='')    
          data[element.realName] = this.$refs[element.name][0].value;
          })    
          
@@ -103,8 +116,81 @@
        },
        clearError(){
         this.errors = [];
-       }
-     }, 
+       },
+      fetchData:async function(){ 
+      const url = `http://localhost:9707/apis/${this.table}/`;
+      const r = await fetch(url);
+      const data = await r.json();
+      this.dataTest = data; 
+
+      //simplificar fecha
+      this.dataTest.forEach((element) => {
+        element.fecha = element?.fecha?.substring(0, 10);
+      });
+      this.updateData();
+    },
+     updateData(){ 
+      this.dataTest.forEach(element =>{ 
+        if(element.id== this.id){
+          for (var i in element){  
+         this.list.forEach(element2 =>{  
+          if(element2.realName == i)
+          { 
+         if(element2.type=="selector"){   
+          this.$refs.option[0].value = element[i];
+         }
+         else 
+           this.$refs[element2.name][0].value = element[i];
+          }
+        }) 
+      }
+        } 
+       }) 
+    
+     },
+     clichSelect(){ 
+      let select = document.querySelector('select');
+if(select != null){
+select.addEventListener('focus', () => {
+ // select.size = 3; 
+  select.classList.add('fadeIn'); 
+  select.classList.remove('fadeOut');
+  select.style.backgroundColor = '#FFF';
+});
+
+select.addEventListener('blur', () => {
+  select.size = 1; 
+  select.classList.add('fadeOut');
+  select.classList.remove('fadeIn');
+  select.style.backgroundColor = '#FFF';
+});
+
+select.addEventListener('change', () => {
+  select.size = 1; 
+  select.blur();
+  select.style.backgroundColor = '#FFF';
+});
+
+select.addEventListener('mouseover', () => {
+  if(select.size == 1){
+     select.style.backgroundColor = 'rgb(247, 247, 247)';
+  }
+});
+select.addEventListener('mouseout', () => {
+  if(select.size == 1){
+     select.style.backgroundColor = '#FFF';
+  }
+}); 
+     }
+    },
+    onChange(e){ 
+    this.selectedTemp = e.target.value;
+    }
+     },
+      
+     mounted(){  
+      this.fetchData();
+    }
    };
    </script>
    

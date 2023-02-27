@@ -5,7 +5,7 @@
   <script>
 import  Table from "@/components/Table.vue"; 
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, inject } from "vue";
 
 export default {
   name: "CultivosComponent",
@@ -41,8 +41,8 @@ export default {
     let listModal = ref([
       {name :"Nombre", type: "text", realName: "name"}, 
       {name :"Tipo", type: "text", realName: "tipo"},
-      {name :"Plan", type: "text", realName: "plan"},
-      {name :"Real", type: "text", realName: "real"},
+      {name :"Plan", type: "number", realName: "plan"},
+      {name :"Real", type: "number", realName: "real"},
       {name :"Area Existencia", type: "text", realName: "areaExistencia"},
       {name :"Tierra Mov", type: "text", realName: "tierraMov"},
       {name :"Tierra Lista", type: "text", realName: "tierraLista"},
@@ -52,8 +52,10 @@ export default {
      return {
       listModal,
       testFields,
-      testFieldsR
+      testFieldsR,
     };
+
+    
   },
 };
 </script>

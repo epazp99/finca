@@ -10,7 +10,7 @@
     </div>
 
     <div style="text-align:end;justify-content:end;margin:0 auto;padding-left:73%;margin-top:2%;">
-      <ModalAdd :title="'Agregar nuevo '+shortName" :table="name" :list="listModal" v-on:update="fetchData()"/>
+      <ModalAdd :title="'Agregar nuevo '+shortName" :table="name" :list="listModal" v-on:update="fetchData()" :selectt="selectt"/>
     </div> 
     </div>
     
@@ -34,8 +34,8 @@
         </thead>
         <tbody>
           <!-- Loop through the list get the each student data -->
-          <tr v-for="item in dataTest" :key="item.id" v-show="getCategory(item)"> 
-            <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
+        <tr v-for="item in dataTest" :key="item.id" v-show="getCategory(item)"> 
+          <td v-for="field in testFields" :key="field">{{ item[field] }}</td>
            
             <th class="trackB" @click="updateRow(item.id)">
               <svg
@@ -71,7 +71,7 @@
       </table>
     </div>
 
-    <ModalUpdate v-if="updateD" :title="'Editar '+shortName" :id="idTemp" :table="name" :list="listModal" v-on:close="updateD = false" v-on:update="updateD = false;fetchData()"/>
+    <ModalUpdate v-if="updateD" :title="'Editar '+shortName" :id="idTemp" :table="name" :list="listModal" :selectt="selectt" v-on:close="updateD = false" v-on:update="updateD = false;fetchData()"/>
 
     <ModalDelete v-if="deleteD" :row="idTemp" :table="name" v-on:delete="fetchData()" v-on:close="deleteD = false"/>
  
@@ -83,7 +83,7 @@ import  ModalAdd from "@/components/ModalAdd.vue";
 import  ModalUpdate from "@/components/ModalUpdate.vue";
 import  ModalDelete from "@/components/ModalDelete.vue";
 
-import { ref, onMounted } from "vue";
+import { ref, onMounted, getCurrentInstance  } from "vue";
 
 export default {
   name: "TableComponent",
@@ -110,7 +110,10 @@ export default {
     },
     testFieldsR: {
       type : Object
-    }
+    },
+    selectt: {
+      type : Array
+    },
   }, 
   setup(props) {
     let dataTest = ref(null);
@@ -119,11 +122,19 @@ export default {
     let deleteD = ref(false);
     let updateD = ref(false);
     let idTemp = ref(""); 
+ 
 
     const fetchData = async () => {
       loading.value = true;
-      const url = `http://localhost:9707/apis/${props.name}/`;
-      const r = await fetch(url);
+      const app = getCurrentInstance()
+      const finca = app.appContext.config.globalProperties.$myGlobalVariable
+  
+      const url = props.name == 'animals' ? `http://localhost:9707/apis/${props.name}?idFincaId=${finca}`
+      : `http://localhost:9707/apis/${props.name}?idFinca=${finca}`;
+
+      const r = await fetch(url, { 
+       headers: {"Content-type": "application/json;charset=UTF-8"}, 
+      });
       const data = await r.json();
       dataTest.value = data;
       loading.value = false;
@@ -167,11 +178,11 @@ export default {
       return true;
     }
 
-    onMounted(() => {
+    onMounted(() => {  
       fetchData();
     });
 
-    return {
+    return { 
       dataTest,
       loading,
       error, 
@@ -338,93 +349,15 @@ label {
   --bs-table-hover-color: #000;
   color: var(--bs-table-color);
   border-color: var(--bs-table-border-color);
-}
-.table-success {
-  --bs-table-color: #000;
-  --bs-table-bg: #d1e7dd;
-  --bs-table-border-color: #bcd0c7;
-  --bs-table-striped-bg: #c7dbd2;
-  --bs-table-striped-color: #000;
-  --bs-table-active-bg: #bcd0c7;
-  --bs-table-active-color: #000;
-  --bs-table-hover-bg: #c1d6cc;
-  --bs-table-hover-color: #000;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-.table-info {
-  --bs-table-color: #000;
-  --bs-table-bg: #cff4fc;
-  --bs-table-border-color: #badce3;
-  --bs-table-striped-bg: #c5e8ef;
-  --bs-table-striped-color: #000;
-  --bs-table-active-bg: #badce3;
-  --bs-table-active-color: #000;
-  --bs-table-hover-bg: #bfe2e9;
-  --bs-table-hover-color: #000;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-.table-warning {
-  --bs-table-color: #000;
-  --bs-table-bg: #fff3cd;
-  --bs-table-border-color: #e6dbb9;
-  --bs-table-striped-bg: #f2e7c3;
-  --bs-table-striped-color: #000;
-  --bs-table-active-bg: #e6dbb9;
-  --bs-table-active-color: #000;
-  --bs-table-hover-bg: #ece1be;
-  --bs-table-hover-color: #000;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-.table-danger {
-  --bs-table-color: #000;
-  --bs-table-bg: #f8d7da;
-  --bs-table-border-color: #dfc2c4;
-  --bs-table-striped-bg: #eccccf;
-  --bs-table-striped-color: #000;
-  --bs-table-active-bg: #dfc2c4;
-  --bs-table-active-color: #000;
-  --bs-table-hover-bg: #e5c7ca;
-  --bs-table-hover-color: #000;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-.table-light {
-  --bs-table-color: #000;
-  --bs-table-bg: #f8f9fa;
-  --bs-table-border-color: #dfe0e1;
-  --bs-table-striped-bg: #ecedee;
-  --bs-table-striped-color: #000;
-  --bs-table-active-bg: #dfe0e1;
-  --bs-table-active-color: #000;
-  --bs-table-hover-bg: #e5e6e7;
-  --bs-table-hover-color: #000;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-.table-dark {
-  --bs-table-color: #fff;
-  --bs-table-bg: #212529;
-  --bs-table-border-color: #373b3e;
-  --bs-table-striped-bg: #2c3034;
-  --bs-table-striped-color: #fff;
-  --bs-table-active-bg: #373b3e;
-  --bs-table-active-color: #fff;
-  --bs-table-hover-bg: #323539;
-  --bs-table-hover-color: #fff;
-  color: var(--bs-table-color);
-  border-color: var(--bs-table-border-color);
-}
-//.table-responsive {
-// overflow-x: auto;
-// overflow-y: auto;
-// -webkit-overflow-scrolling: touch;
+} 
+.table-responsive {
+overflow-x: auto;
+overflow-y: auto;
+-webkit-overflow-scrolling: touch;
 
-// height: auto ;
-// max-height:580px;
-//}
+height: auto ;
+max-height:580px;
+}
 @media (max-width: 575.98px) {
   .table-responsive-sm {
     overflow-x: auto;
@@ -479,8 +412,8 @@ label {
 }
 
 .scrollbar {
-  height: auto;
   width: auto;
+  height: auto;
   max-height: 580px;
   max-width: 100%;
   background: #f5f5f5;
