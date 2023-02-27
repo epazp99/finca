@@ -1,53 +1,149 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-<div id="container" style="margin-left: 100px;">
+<div id="container" :style="getStyle()">
   <div id="left">
-    <img src="/test.png" width="300" height="200" style="padding-bottom: 10px;margin-bottom: 0px;margin-left: 100px;margin-top: 30px;"/>
+    <img src="/test.png" width="300" height="200" style="padding-bottom: 5px;margin-bottom: 0px;margin-top: 30px;"/>
     <h1 id="welcome" style="font-weight:400;padding-top: 20px;margin-top: 0px">Welcome</h1> 
     <p id="lorem">
       Lorem ipsum dolor sit amet, consectetur adipiscing elit.<br>
       Vivamus sodales eros non arcu pellentesque convallis.<br>
-      Nunc dignissim lectus in malesuada porta.<br>
-      Proin ac erat sed urna congue suscipit.<br>
-      Morbi aliquet eget nisl id ornare.
+      Nunc dignissim lectus in malesuada porta.<br> 
     </p>
-  </div>
-  <div id="right">
+    <div style="display: flex; margin-top: 0%;margin-bottom: 10%;">
+     <input v-if="sent" type="submit" id="submit" class="client-info button" style="margin-right: 1%; margin-left: 8%;" value="Register" @click="register=true, login = false">
+     <input v-if="sent" type="submit" id="submit" class="client-info button" style="margin-right: 8%; margin-left: 1%;" value="Login" @click="login=true, register = false">
+    </div>
+  </div> 
+  <div id="right" v-if="login&&sent">
     <h1 id="login" style="font-weight: 400;">LogIn</h1><br>
-    <input type="email" id="email" class="client-info">
-    <label v-modal="username" for="email">Username</label>
-    <input v-modal="password" type="password" id="password" class="client-info">
+
+    <form method="POST" action="javascript:void(0)" validate="novalidate" @submit="loginUser()"> 
+    <input @click="error = ''" type="text" v-model="username" id="email" class="client-info" required="required" :data-validation-required-message="'Please enter username'">
+    <label for="email">Username</label> 
+
+    <input @click="error = ''" type="password" v-model="password" id="password" class="client-info" required="required" :data-validation-required-message="'Please enter password'">
     <label for="password">Password</label>
   
-    <input type="submit" id="submit" class="client-info button" value="Submit">
-   
+    <input type="submit" id="submit" href="javascript:void(0)" class="client-info button" value="Submit">
+   </form>
+   <p v-if="error" style="color:#EB5E30;text-align:center">
+     {{error}}
+  </p>
   </div>
-</div>
 
-</template>
 
- <script lang="ts"> 
+  <div id="right" v-if="register&&sent">
+    <h1 id="login" style="font-weight: 400;">Register</h1><br>
 
-export default {
-  name: "UserComponent", 
-  props: {
-    text: null, 
-    // eslint-disable-next-line vue/require-prop-type-constructor
-  },
-  data() {
-    return {
-      username: null,
-      password: null
+   <form method="POST" action="javascript:void(0)" validate="novalidate" @submit="addUser()"> 
+    <input v-model="username" type="text" id="email" class="client-info" required="required" :data-validation-required-message="'Please enter username'">
+    <label for="email">Username</label>
+
+    <input v-model="finca" type="text" id="finca" class="client-info" required="required" :data-validation-required-message="'Please enter finca'">
+    <label for="finca">Finca</label>
+
+    <select id="rol" name="select" placeholder="admin" class="client-info">
+     <option :value="rol1">{{rol1}}</option> 
+     <option value="Otro">Otro</option> 
+    </select> 
+    <label for="rol">Rol</label>
+
+    <input v-model="password" type="password" id="password" class="client-info" required="required" :data-validation-required-message="'Please enter password'">
+    <label for="password">Password</label>
+  
+    <input required type="submit" id="submit" href="javascript:void(0)" class="client-info button" value="Submit">
+   </form>
+  
+  </div>
+
+</div> 
+</template> 
+ 
+<script setup> 
+
+import { ref, getCurrentInstance } from "vue";
+ 
+let username = ref('');
+let password = ref(''); 
+let finca = ref('');  
+
+let rol1 = ref("Administrador");
+
+let login = ref(true);
+let register = ref(false);
+
+let sent = ref(true);
+
+let error = ref(null);
+      
+const app = getCurrentInstance()
+
+let getStyle=()=>{
+  return sent.value ? "margin-left: 100px;" : "margin-left: 350px;";
+}
+
+let list = ref([
+      {name :"Nombre", type: "text", realName: "name"}, 
+      {name :"Rol", type: "selector", realName: "rol"},
+      {name :"Password", type: "text", realName: "password"}, 
+     ]); 
+ 
+
+ async function addUser(){ 
+      let data = {};
+
+      data["idFinca"] = finca.value;
+        
+      list.value.forEach((element, index) =>{     
+      if(element.realName == 'rol'){
+        data[element.realName] = rol1.value;
+      }
+      else if(element.realName == 'name'){
+        data[element.realName] = username.value;
+      } 
+      else if(element.realName == 'password'){
+        data[element.realName] = password.value;
+      }  
+
+      })  
+ 
+ 
+      const url = await fetch(`http://localhost:9707/apis/usuario/`, {
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }).then((res) => res.json());
+ 
+     app.appContext.config.globalProperties.$myGlobalVariable = finca.value; 
+
+     sent.value=false;
+ 
     };
-  }, 
-//   methods: {
-//     login() { 
-    
-//   }
-//},  
-};
-</script>
+ 
 
+    let loginUser = async () => { 
+    
+      error.value = null;  
+      const url = `http://localhost:9707/apis/usuario?name=${username.value}&password=${password.value}`;
+
+      const r = await fetch(url, { 
+       headers: {"Content-type": "application/json;charset=UTF-8"}, 
+      });
+      const data = await r.json();
+        
+      if(data[0] == null)
+      error.value = "Los datos introducidos son incorrectos"
+      else {
+
+      app.appContext.config.globalProperties.$myGlobalVariable = data[0].idFinca; 
+
+      sent.value=false; 
+      }
+    };
+</script>
+ 
 
 <style scoped>
 
@@ -102,6 +198,7 @@ html {
        inset 0 -3em 3em rgba(0,0,0,0.1),
              0 0  0 2px rgb(255,255,255),
              0.3em 0.3em 1em rgba(0,0,0,0.3);
+             text-align: center;
 }
 #welcome, #lorem {
   margin: 20px;
@@ -130,6 +227,7 @@ html {
   text-indent: 15px;
   transition: all 200ms;
   box-shadow: var(--box-shadow);
+  padding-top: 2.5%;
 }
 .client-info:focus {
   width: 80%;

@@ -122,11 +122,11 @@ export default {
     let deleteD = ref(false);
     let updateD = ref(false);
     let idTemp = ref(""); 
- 
+  
+    const app = getCurrentInstance()
 
     const fetchData = async () => {
       loading.value = true;
-      const app = getCurrentInstance()
       const finca = app.appContext.config.globalProperties.$myGlobalVariable
   
       const url = props.name == 'animals' ? `http://localhost:9707/apis/${props.name}?idFincaId=${finca}`
@@ -179,7 +179,7 @@ export default {
     }
 
     onMounted(() => {  
-      fetchData();
+      fetchData(); 
     });
 
     return { 
