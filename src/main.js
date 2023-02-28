@@ -20,6 +20,7 @@ app.mount("#app");
 
 app.config.globalProperties.$myGlobalVariable = idFincaGlobal
 
+
 //al llamarla es 
 //this.$myGlobalVariable = "testt";
  
